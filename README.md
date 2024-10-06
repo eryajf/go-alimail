@@ -21,3 +21,52 @@
 ## 项目简介
 
 [阿里企业邮箱](https://wanwang.aliyun.com/mail)GO语言SDK。
+
+## 快速开始
+
+**安装依赖**
+
+```
+go get github.com/eryajf/go-alimail
+```
+
+**简单示例**
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/eryajf/go-alimail/alimail"
+)
+
+func main() {
+	client := alimail.NewClient("appID", "appSecret")
+	on, err := client.Organization.Get(context.Background())
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
+	fmt.Printf("Organization: %+v\n", on)
+	domains, err := client.Domain.List(context.Background())
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
+	fmt.Printf("Domains: %+v\n", domains)
+}
+```
+
+
+## 其他说明
+
+- 如果觉得项目不错，麻烦动动小手点个 ⭐️star⭐️!
+- 如果你还有其他想法或者需求，欢迎在 issue 中交流！
+
+## 捐赠打赏
+
+如果你觉得这个项目对你有帮助，你可以请作者喝杯咖啡 ☕️
+
+| 支付宝|微信|
+|:--------: |:--------: |
+|![](https://t.eryajf.net/imgs/2023/01/fc21022aadd292ca.png)| ![](https://t.eryajf.net/imgs/2023/01/834f12107ebc432a.png) |
