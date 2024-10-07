@@ -18,3 +18,15 @@ const (
 var BaseHeader = map[string]string{
 	"Content-Type": "application/json",
 }
+
+// 邮箱账号状态
+const (
+	NORMAL = "NORMAL" // 正常
+	FREEZE = "FREEZE" // 被冻结
+)
+
+// 邮箱账号类型
+const (
+	EMPLOYEE = "EMPLOYEE" // 员工
+	SERVICE  = "SERVICE"  // 共享账号
+)
