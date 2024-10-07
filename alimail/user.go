@@ -130,7 +130,7 @@ func (d *UserService) ListByIds(ctx context.Context, ids []string) ([]User, erro
 	return dataObj.Users, nil
 }
 
-type createUserRequest struct {
+type CreateUserReq struct {
 	Email                         string   `json:"email"`                                   // 用户邮箱
 	Password                      string   `json:"password"`                                // 用户密码
 	Name                          string   `json:"name"`                                    // 用户姓名
@@ -153,7 +153,7 @@ type createUserRequest struct {
 }
 
 // Create 创建用户
-func (u *UserService) Create(ctx context.Context, req createUserRequest) (*User, error) {
+func (u *UserService) Create(ctx context.Context, req CreateUserReq) (*User, error) {
 	path := "/v2/users"
 
 	headers := map[string]string{
@@ -195,7 +195,7 @@ func (u *UserService) Create(ctx context.Context, req createUserRequest) (*User,
 	}
 }
 
-type updateUserRequest struct {
+type UpdateUserReq struct {
 	BaseUserReq                            // 用户ID或邮箱
 	Name                          string   `json:"name"`                                    // 用户姓名
 	Nickname                      *string  `json:"nickname,omitempty"`                      // 用户昵称
@@ -216,7 +216,7 @@ type updateUserRequest struct {
 }
 
 // Update 更新用户信息
-func (u *UserService) Update(ctx context.Context, req updateUserRequest) (*User, error) {
+func (u *UserService) Update(ctx context.Context, req UpdateUserReq) (*User, error) {
 	if req.Email == "" && req.ID == "" {
 		return nil, fmt.Errorf("id and email can't be empty at the same time")
 	}
@@ -298,14 +298,14 @@ func (d *UserService) Delete(ctx context.Context, req BaseUserReq) (*User, error
 	}
 }
 
-type changeUserPasswordReq struct {
+type ChangeUserPasswordReq struct {
 	BaseUserReq
 	Old string `json:"old"`
 	New string `json:"new"`
 }
 
 // ChangePassword 修改用户密码
-func (d *UserService) ChangePassword(ctx context.Context, req changeUserPasswordReq) (*User, error) {
+func (d *UserService) ChangePassword(ctx context.Context, req ChangeUserPasswordReq) (*User, error) {
 	if req.ID == "" && req.Email == "" {
 		return nil, fmt.Errorf("id and email can't be empty at the same time")
 	}
@@ -351,14 +351,14 @@ func (d *UserService) ChangePassword(ctx context.Context, req changeUserPassword
 	}
 }
 
-type resetUserPasswordReq struct {
+type ResetUserPasswordReq struct {
 	BaseUserReq
 	Password                      string `json:"password"`
 	ForceChangePasswordNextSignIn bool   `json:"forceChangePasswordNextSignIn"` // 下次登录是否强制修改密码
 }
 
 // ResetPassword 重置用户密码
-func (d *UserService) ResetPassword(ctx context.Context, req resetUserPasswordReq) (*User, error) {
+func (d *UserService) ResetPassword(ctx context.Context, req ResetUserPasswordReq) (*User, error) {
 	if req.ID == "" && req.Email == "" {
 		return nil, fmt.Errorf("id and email can't be empty at the same time")
 	}
@@ -404,14 +404,14 @@ func (d *UserService) ResetPassword(ctx context.Context, req resetUserPasswordRe
 	}
 }
 
-type addEmailAliasReq struct {
+type AddEmailAliasReq struct {
 	BaseUserReq
 	Alias     string `json:"alias"`
 	AsDefault bool   `json:"asDefault"` // 是否作为默认展示的别名
 }
 
 // AddEmailAlias 添加邮箱别名
-func (d *UserService) AddEmailAlias(ctx context.Context, req addEmailAliasReq) (*User, error) {
+func (d *UserService) AddEmailAlias(ctx context.Context, req AddEmailAliasReq) (*User, error) {
 	if req.ID == "" && req.Email == "" {
 		return nil, fmt.Errorf("id and email can't be empty at the same time")
 	}
@@ -457,13 +457,13 @@ func (d *UserService) AddEmailAlias(ctx context.Context, req addEmailAliasReq) (
 	}
 }
 
-type deleteEmailAliasReq struct {
+type DeleteEmailAliasReq struct {
 	BaseUserReq
 	Alias string `json:"alias"`
 }
 
 // DeleteEmailAlias 删除邮箱别名
-func (d *UserService) DeleteEmailAlias(ctx context.Context, req deleteEmailAliasReq) (*User, error) {
+func (d *UserService) DeleteEmailAlias(ctx context.Context, req DeleteEmailAliasReq) (*User, error) {
 	if req.ID == "" && req.Email == "" {
 		return nil, fmt.Errorf("id and email can't be empty at the same time")
 	}

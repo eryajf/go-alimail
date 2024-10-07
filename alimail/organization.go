@@ -50,7 +50,7 @@ func (d *OrganizationService) Get(ctx context.Context) (*Organization, error) {
 	}
 }
 
-type updateOrganizationReq struct {
+type UpdateOrganizationReq struct {
 	Name              string `json:"name"`
 	Introduction      string `json:"introduction"`
 	Telephone         string `json:"telephone"`
@@ -59,7 +59,7 @@ type updateOrganizationReq struct {
 }
 
 // update 更新组织信息
-func (d *OrganizationService) Update(ctx context.Context, req updateOrganizationReq) (*Organization, error) {
+func (d *OrganizationService) Update(ctx context.Context, req UpdateOrganizationReq) (*Organization, error) {
 	path := "/v2/organization/$current"
 
 	body, err := json.Marshal(req)
