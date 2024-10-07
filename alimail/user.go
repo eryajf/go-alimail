@@ -131,25 +131,25 @@ func (d *UserService) ListByIds(ctx context.Context, ids []string) ([]User, erro
 }
 
 type CreateUserReq struct {
-	Email                         string   `json:"email"`                                   // 用户邮箱
-	Password                      string   `json:"password"`                                // 用户密码
-	Name                          string   `json:"name"`                                    // 用户姓名
-	Nickname                      string   `json:"nickname,omitempty"`                      // 用户昵称
-	EmployeeNo                    string   `json:"employeeNo,omitempty"`                    // 员工编号
-	JobTitle                      string   `json:"jobTitle,omitempty"`                      // 职位
-	WorkLocation                  string   `json:"workLocation,omitempty"`                  // 工作地点
-	OfficeLocation                string   `json:"officeLocation,omitempty"`                // 办公地点
-	HomeLocation                  string   `json:"homeLocation,omitempty"`                  // 家庭住址
-	DepartmentIds                 []string `json:"departmentIds"`                           // 部门ID列表
-	Phone                         string   `json:"phone,omitempty"`                         // 手机号
-	WorkPhone                     string   `json:"workPhone,omitempty"`                     // 工作电话
-	Status                        string   `json:"status,omitempty"`                        // 用户状态
-	CustomName                    string   `json:"customName,omitempty"`                    // 自定义名称
-	ManagerEmail                  string   `json:"managerEmail,omitempty"`                  // 上级邮箱
-	IsHidden                      bool     `json:"isHidden,omitempty"`                      // 是否隐藏
-	Info                          string   `json:"info,omitempty"`                          // 信息
-	ForceChangePasswordNextSignIn bool     `json:"forceChangePasswordNextSignIn,omitempty"` // 下次登录是否强制修改密码
-	EmployeeType                  string   `json:"employeeType,omitempty"`                  // 员工类型
+	Email                         string             `json:"email"`                                   // 用户邮箱
+	Password                      string             `json:"password"`                                // 用户密码
+	Name                          string             `json:"name"`                                    // 用户姓名
+	Nickname                      string             `json:"nickname,omitempty"`                      // 用户昵称
+	EmployeeNo                    string             `json:"employeeNo,omitempty"`                    // 员工编号
+	JobTitle                      string             `json:"jobTitle,omitempty"`                      // 职位
+	WorkLocation                  string             `json:"workLocation,omitempty"`                  // 工作地点
+	OfficeLocation                string             `json:"officeLocation,omitempty"`                // 办公地点
+	HomeLocation                  string             `json:"homeLocation,omitempty"`                  // 家庭住址
+	DepartmentIds                 []string           `json:"departmentIds"`                           // 部门ID列表
+	Phone                         string             `json:"phone,omitempty"`                         // 手机号
+	WorkPhone                     string             `json:"workPhone,omitempty"`                     // 工作电话
+	Status                        EmailAccountStatus `json:"status,omitempty"`                        // 用户状态
+	CustomName                    string             `json:"customName,omitempty"`                    // 自定义名称
+	ManagerEmail                  string             `json:"managerEmail,omitempty"`                  // 上级邮箱
+	IsHidden                      bool               `json:"isHidden,omitempty"`                      // 是否隐藏
+	Info                          string             `json:"info,omitempty"`                          // 信息
+	ForceChangePasswordNextSignIn bool               `json:"forceChangePasswordNextSignIn,omitempty"` // 下次登录是否强制修改密码
+	EmployeeType                  EmailAccountType   `json:"employeeType,omitempty"`                  // 员工类型
 }
 
 // Create 创建用户
@@ -196,23 +196,23 @@ func (u *UserService) Create(ctx context.Context, req CreateUserReq) (*User, err
 }
 
 type UpdateUserReq struct {
-	BaseUserReq                            // 用户ID或邮箱
-	Name                          string   `json:"name"`                                    // 用户姓名
-	Nickname                      string   `json:"nickname,omitempty"`                      // 用户昵称
-	EmployeeNo                    string   `json:"employeeNo,omitempty"`                    // 员工编号
-	JobTitle                      string   `json:"jobTitle,omitempty"`                      // 职位
-	WorkLocation                  string   `json:"workLocation,omitempty"`                  // 工作地点
-	OfficeLocation                string   `json:"officeLocation,omitempty"`                // 办公地点
-	HomeLocation                  string   `json:"homeLocation,omitempty"`                  // 家庭住址
-	DepartmentIds                 []string `json:"departmentIds"`                           // 部门ID列表
-	Phone                         string   `json:"phone,omitempty"`                         // 手机号
-	WorkPhone                     string   `json:"workPhone,omitempty"`                     // 工作电话
-	Status                        string   `json:"status,omitempty"`                        // 用户状态
-	CustomName                    string   `json:"customName,omitempty"`                    // 自定义名称
-	ManagerEmail                  string   `json:"managerEmail,omitempty"`                  // 上级邮箱
-	IsHidden                      bool     `json:"isHidden,omitempty"`                      // 是否隐藏
-	Info                          string   `json:"info,omitempty"`                          // 信息
-	ForceChangePasswordNextSignIn bool     `json:"forceChangePasswordNextSignIn,omitempty"` // 下次登录是否强制修改密码
+	BaseUserReq                                      // 用户ID或邮箱
+	Name                          string             `json:"name"`                                    // 用户姓名
+	Nickname                      string             `json:"nickname,omitempty"`                      // 用户昵称
+	EmployeeNo                    string             `json:"employeeNo,omitempty"`                    // 员工编号
+	JobTitle                      string             `json:"jobTitle,omitempty"`                      // 职位
+	WorkLocation                  string             `json:"workLocation,omitempty"`                  // 工作地点
+	OfficeLocation                string             `json:"officeLocation,omitempty"`                // 办公地点
+	HomeLocation                  string             `json:"homeLocation,omitempty"`                  // 家庭住址
+	DepartmentIds                 []string           `json:"departmentIds"`                           // 部门ID列表
+	Phone                         string             `json:"phone,omitempty"`                         // 手机号
+	WorkPhone                     string             `json:"workPhone,omitempty"`                     // 工作电话
+	Status                        EmailAccountStatus `json:"status,omitempty"`                        // 用户状态
+	CustomName                    string             `json:"customName,omitempty"`                    // 自定义名称
+	ManagerEmail                  string             `json:"managerEmail,omitempty"`                  // 上级邮箱
+	IsHidden                      bool               `json:"isHidden,omitempty"`                      // 是否隐藏
+	Info                          string             `json:"info,omitempty"`                          // 信息
+	ForceChangePasswordNextSignIn bool               `json:"forceChangePasswordNextSignIn,omitempty"` // 下次登录是否强制修改密码
 }
 
 // Update 更新用户信息
