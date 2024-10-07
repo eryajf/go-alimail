@@ -19,14 +19,18 @@ var BaseHeader = map[string]string{
 	"Content-Type": "application/json",
 }
 
+type EmailAccountStatus string
+
 // 邮箱账号状态
 const (
-	NORMAL = "NORMAL" // 正常
-	FREEZE = "FREEZE" // 被冻结
+	NORMAL EmailAccountStatus = "NORMAL" // 正常
+	FREEZE EmailAccountStatus = "FREEZE" // 被冻结
 )
+
+type EmailAccountType string
 
 // 邮箱账号类型
 const (
-	EMPLOYEE = "EMPLOYEE" // 员工
-	SERVICE  = "SERVICE"  // 共享账号
+	EMPLOYEE EmailAccountType = "EMPLOYEE" // 员工
+	SERVICE  EmailAccountType = "SERVICE"  // 共享账号
 )

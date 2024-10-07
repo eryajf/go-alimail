@@ -13,21 +13,21 @@ type UserService struct{ *Client }
 
 // User 用户信息
 type User struct {
-	ID             string   `json:"id"`             // 用户ID
-	Email          string   `json:"email"`          // 用户邮箱
-	EmailAliases   []string `json:"emailAliases"`   // 用户邮箱别名
-	Name           string   `json:"name"`           // 用户姓名
-	Nickname       string   `json:"nickname"`       // 用户昵称
-	EmployeeNo     string   `json:"employeeNo"`     // 员工编号
-	JobTitle       string   `json:"jobTitle"`       // 职位
-	WorkLocation   string   `json:"workLocation"`   // 工作地点
-	OfficeLocation string   `json:"officeLocation"` // 办公地点
-	HomeLocation   string   `json:"homeLocation"`   // 家庭住址
-	DepartmentIds  []string `json:"departmentIds"`  // 部门ID列表
-	Phone          string   `json:"phone"`          // 手机号
-	WorkPhone      string   `json:"workPhone"`      // 工作电话
-	Status         string   `json:"status"`         // 用户状态
-	Avatar         struct { // 用户头像
+	ID             string             `json:"id"`             // 用户ID
+	Email          string             `json:"email"`          // 用户邮箱
+	EmailAliases   []string           `json:"emailAliases"`   // 用户邮箱别名
+	Name           string             `json:"name"`           // 用户姓名
+	Nickname       string             `json:"nickname"`       // 用户昵称
+	EmployeeNo     string             `json:"employeeNo"`     // 员工编号
+	JobTitle       string             `json:"jobTitle"`       // 职位
+	WorkLocation   string             `json:"workLocation"`   // 工作地点
+	OfficeLocation string             `json:"officeLocation"` // 办公地点
+	HomeLocation   string             `json:"homeLocation"`   // 家庭住址
+	DepartmentIds  []string           `json:"departmentIds"`  // 部门ID列表
+	Phone          string             `json:"phone"`          // 手机号
+	WorkPhone      string             `json:"workPhone"`      // 工作电话
+	Status         EmailAccountStatus `json:"status"`         // 用户状态
+	Avatar         struct {           // 用户头像
 		URL     string `json:"url"`     // 头像URL
 		BgColor string `json:"bgColor"` // 头像背景颜色
 	} `json:"avatar"`
@@ -46,17 +46,17 @@ type User struct {
 			Segments []string `json:"segments"` // 路径段
 		} `json:"paths"`
 	} `json:"departmentPath"`
-	EnableClientPassword           bool      `json:"enableClientPassword"`           // 是否启用客户端密码
-	LastLoginTime                  time.Time `json:"lastLoginTime"`                  // 最后登录时间
-	LastPasswordChangeTime         time.Time `json:"lastPasswordChangeTime"`         // 最后修改密码时间
-	IsInitialPassword              bool      `json:"isInitialPassword"`              // 是否初始密码
-	IsHidden                       bool      `json:"isHidden"`                       // 是否隐藏
-	LastLoginIP                    string    `json:"lastLoginIp"`                    // 最后登录IP
-	Info                           string    `json:"info"`                           // 信息
-	ForceChangePasswordNextSignIn  bool      `json:"forceChangePasswordNextSignIn"`  // 下次登录是否强制修改密码
-	EmployeeType                   string    `json:"employeeType"`                   // 员工类型
-	PasswordExpireTime             time.Time `json:"passwordExpireTime"`             // 密码过期时间
-	LastLoginTime4StandardProtocol time.Time `json:"lastLoginTime4StandardProtocol"` // 最后登录时间（标准协议）
+	EnableClientPassword           bool             `json:"enableClientPassword"`           // 是否启用客户端密码
+	LastLoginTime                  time.Time        `json:"lastLoginTime"`                  // 最后登录时间
+	LastPasswordChangeTime         time.Time        `json:"lastPasswordChangeTime"`         // 最后修改密码时间
+	IsInitialPassword              bool             `json:"isInitialPassword"`              // 是否初始密码
+	IsHidden                       bool             `json:"isHidden"`                       // 是否隐藏
+	LastLoginIP                    string           `json:"lastLoginIp"`                    // 最后登录IP
+	Info                           string           `json:"info"`                           // 信息
+	ForceChangePasswordNextSignIn  bool             `json:"forceChangePasswordNextSignIn"`  // 下次登录是否强制修改密码
+	EmployeeType                   EmailAccountType `json:"employeeType"`                   // 员工类型
+	PasswordExpireTime             time.Time        `json:"passwordExpireTime"`             // 密码过期时间
+	LastLoginTime4StandardProtocol time.Time        `json:"lastLoginTime4StandardProtocol"` // 最后登录时间（标准协议）
 }
 
 type BaseUserReq struct {
