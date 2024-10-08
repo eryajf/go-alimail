@@ -58,6 +58,10 @@ func (e *APIError) Error() string {
 
 // parseAPIError 解析API返回的错误响应
 func parseAPIError(resp *http.Response) error {
+	// 如果不需要再返回内容，则可直接调用此方法
+	if resp.StatusCode == http.StatusOK {
+		return nil
+	}
 	var apiErr APIError
 	apiErr.StatusCode = resp.StatusCode
 	body, err := io.ReadAll(resp.Body)

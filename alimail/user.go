@@ -231,9 +231,9 @@ func (u *UserService) Update(ctx context.Context, req UpdateUserReq) (*User, err
 }
 
 // Delete 删除用户
-func (d *UserService) Delete(ctx context.Context, req BaseUserReq) (*User, error) {
+func (d *UserService) Delete(ctx context.Context, req BaseUserReq) error {
 	if req.Email == "" && req.ID == "" {
-		return nil, fmt.Errorf("id and email can't be empty at the same time")
+		return fmt.Errorf("id and email can't be empty at the same time")
 	}
 	var path string
 	if req.Email != "" {
@@ -244,18 +244,11 @@ func (d *UserService) Delete(ctx context.Context, req BaseUserReq) (*User, error
 
 	resp, err := d.doRequest(ctx, MethodDelete, path, BaseHeader, nil)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var dataObj User
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }
 
 type ChangeUserPasswordReq struct {
@@ -265,9 +258,9 @@ type ChangeUserPasswordReq struct {
 }
 
 // ChangePassword 修改用户密码
-func (d *UserService) ChangePassword(ctx context.Context, req ChangeUserPasswordReq) (*User, error) {
+func (d *UserService) ChangePassword(ctx context.Context, req ChangeUserPasswordReq) error {
 	if req.ID == "" && req.Email == "" {
-		return nil, fmt.Errorf("id and email can't be empty at the same time")
+		return fmt.Errorf("id and email can't be empty at the same time")
 	}
 	var path string
 	if req.Email != "" {
@@ -278,23 +271,16 @@ func (d *UserService) ChangePassword(ctx context.Context, req ChangeUserPassword
 
 	body, err := json.Marshal(map[string]string{"old": req.Old, "new": req.New})
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %w", err)
+		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	resp, err := d.doRequest(ctx, MethodDelete, path, BaseHeader, body)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var dataObj User
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }
 
 type ResetUserPasswordReq struct {
@@ -304,9 +290,9 @@ type ResetUserPasswordReq struct {
 }
 
 // ResetPassword 重置用户密码
-func (d *UserService) ResetPassword(ctx context.Context, req ResetUserPasswordReq) (*User, error) {
+func (d *UserService) ResetPassword(ctx context.Context, req ResetUserPasswordReq) error {
 	if req.ID == "" && req.Email == "" {
-		return nil, fmt.Errorf("id and email can't be empty at the same time")
+		return fmt.Errorf("id and email can't be empty at the same time")
 	}
 	var path string
 	if req.Email != "" {
@@ -320,23 +306,15 @@ func (d *UserService) ResetPassword(ctx context.Context, req ResetUserPasswordRe
 		"forceChangePasswordNextSignIn": fmt.Sprintf("%t", req.ForceChangePasswordNextSignIn),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %w", err)
+		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	resp, err := d.doRequest(ctx, MethodPost, path, BaseHeader, body)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode == http.StatusOK {
-		var dataObj User
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }
 
 type AddEmailAliasReq struct {
@@ -346,9 +324,9 @@ type AddEmailAliasReq struct {
 }
 
 // AddEmailAlias 添加邮箱别名
-func (d *UserService) AddEmailAlias(ctx context.Context, req AddEmailAliasReq) (*User, error) {
+func (d *UserService) AddEmailAlias(ctx context.Context, req AddEmailAliasReq) error {
 	if req.ID == "" && req.Email == "" {
-		return nil, fmt.Errorf("id and email can't be empty at the same time")
+		return fmt.Errorf("id and email can't be empty at the same time")
 	}
 	var path string
 	if req.Email != "" {
@@ -359,23 +337,16 @@ func (d *UserService) AddEmailAlias(ctx context.Context, req AddEmailAliasReq) (
 
 	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %w", err)
+		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	resp, err := d.doRequest(ctx, MethodPost, path, BaseHeader, body)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var dataObj User
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }
 
 type DeleteEmailAliasReq struct {
@@ -384,9 +355,9 @@ type DeleteEmailAliasReq struct {
 }
 
 // DeleteEmailAlias 删除邮箱别名
-func (d *UserService) DeleteEmailAlias(ctx context.Context, req DeleteEmailAliasReq) (*User, error) {
+func (d *UserService) DeleteEmailAlias(ctx context.Context, req DeleteEmailAliasReq) error {
 	if req.ID == "" && req.Email == "" {
-		return nil, fmt.Errorf("id and email can't be empty at the same time")
+		return fmt.Errorf("id and email can't be empty at the same time")
 	}
 	var path string
 	if req.Email != "" {
@@ -397,21 +368,14 @@ func (d *UserService) DeleteEmailAlias(ctx context.Context, req DeleteEmailAlias
 
 	body, err := json.Marshal(map[string]string{"alias": req.Alias})
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %w", err)
+		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	resp, err := d.doRequest(ctx, MethodDelete, path, BaseHeader, body)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var dataObj User
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }

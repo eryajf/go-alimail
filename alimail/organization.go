@@ -51,26 +51,19 @@ type UpdateOrganizationReq struct {
 }
 
 // update 更新组织信息
-func (d *OrganizationService) Update(ctx context.Context, req UpdateOrganizationReq) (*Organization, error) {
+func (d *OrganizationService) Update(ctx context.Context, req UpdateOrganizationReq) error {
 	path := "/v2/organization/$current"
 
 	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %w", err)
+		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
 	resp, err := d.doRequest(ctx, MethodPatch, path, BaseHeader, body)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		var dataObj Organization
-		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-			return nil, fmt.Errorf("failed to decode response: %w", err)
-		}
-		return &dataObj, nil
-	}
-	return nil, parseAPIError(resp)
+	return parseAPIError(resp)
 }
