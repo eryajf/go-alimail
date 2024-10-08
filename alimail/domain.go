@@ -42,16 +42,14 @@ func (d *DomainService) List(ctx context.Context) ([]Domain, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if resp.StatusCode == http.StatusOK {
+		var dataObj listDomainsResponse
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
+			return nil, fmt.Errorf("failed to decode response: %w", err)
+		}
+		return dataObj.Domains, nil
 	}
-
-	var listResp listDomainsResponse
-	if err := json.NewDecoder(resp.Body).Decode(&listResp); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return listResp.Domains, nil
+	return nil, parseAPIError(resp)
 }
 
 // Get 根据域名（或域别名）获取域信息
@@ -67,14 +65,12 @@ func (d *DomainService) Get(ctx context.Context, identifier string) (*Domain, er
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if resp.StatusCode == http.StatusOK {
+		var dataObj Domain
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
+			return nil, fmt.Errorf("failed to decode response: %w", err)
+		}
+		return &dataObj, nil
 	}
-
-	var dataObj Domain
-	if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return &dataObj, nil
+	return nil, parseAPIError(resp)
 }

@@ -32,22 +32,14 @@ func (d *OrganizationService) Get(ctx context.Context) (*Organization, error) {
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp Organization
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj Organization
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type UpdateOrganizationReq struct {
@@ -73,20 +65,12 @@ func (d *OrganizationService) Update(ctx context.Context, req UpdateOrganization
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp Organization
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj Organization
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }

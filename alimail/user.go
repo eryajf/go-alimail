@@ -82,16 +82,14 @@ func (d *UserService) Get(ctx context.Context, req BaseUserReq) (*User, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
+			return nil, fmt.Errorf("failed to decode response: %w", err)
+		}
+		return &dataObj, nil
 	}
-
-	var dataObj User
-	if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return &dataObj, nil
+	return nil, parseAPIError(resp)
 }
 
 type listUserByIdsResponse struct {
@@ -118,16 +116,14 @@ func (d *UserService) ListByIds(ctx context.Context, ids []string) ([]User, erro
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if resp.StatusCode == http.StatusOK {
+		var dataObj listUserByIdsResponse
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
+			return nil, fmt.Errorf("failed to decode response: %w", err)
+		}
+		return dataObj.Users, nil
 	}
-
-	var dataObj listUserByIdsResponse
-	if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return dataObj.Users, nil
+	return nil, parseAPIError(resp)
 }
 
 type CreateUserReq struct {
@@ -171,28 +167,14 @@ func (u *UserService) Create(ctx context.Context, req CreateUserReq) (*User, err
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type UpdateUserReq struct {
@@ -238,28 +220,14 @@ func (u *UserService) Update(ctx context.Context, req UpdateUserReq) (*User, err
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 // Delete 删除用户
@@ -280,22 +248,14 @@ func (d *UserService) Delete(ctx context.Context, req BaseUserReq) (*User, error
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type ChangeUserPasswordReq struct {
@@ -327,28 +287,14 @@ func (d *UserService) ChangePassword(ctx context.Context, req ChangeUserPassword
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type ResetUserPasswordReq struct {
@@ -369,39 +315,28 @@ func (d *UserService) ResetPassword(ctx context.Context, req ResetUserPasswordRe
 		path = fmt.Sprintf("/v2/users/%s/resetPassword", req.ID)
 	}
 
-	body, err := json.Marshal(req)
+	body, err := json.Marshal(map[string]string{
+		"password":                      req.Password,
+		"forceChangePasswordNextSignIn": fmt.Sprintf("%t", req.ForceChangePasswordNextSignIn),
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	resp, err := d.doRequest(ctx, MethodDelete, path, BaseHeader, body)
+	resp, err := d.doRequest(ctx, MethodPost, path, BaseHeader, body)
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type AddEmailAliasReq struct {
@@ -433,28 +368,14 @@ func (d *UserService) AddEmailAlias(ctx context.Context, req AddEmailAliasReq) (
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
 
 type DeleteEmailAliasReq struct {
@@ -485,26 +406,12 @@ func (d *UserService) DeleteEmailAlias(ctx context.Context, req DeleteEmailAlias
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var createResp User
-		if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
+	if resp.StatusCode == http.StatusOK {
+		var dataObj User
+		if err := json.NewDecoder(resp.Body).Decode(&dataObj); err != nil {
 			return nil, fmt.Errorf("failed to decode response: %w", err)
 		}
-		return &createResp, nil
-	case http.StatusBadRequest:
-		return nil, fmt.Errorf("bad request")
-	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized")
-	case http.StatusForbidden:
-		return nil, fmt.Errorf("forbidden")
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("not found")
-	case http.StatusConflict:
-		return nil, fmt.Errorf("conflict")
-	case http.StatusTooManyRequests:
-		return nil, fmt.Errorf("too many requests")
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return &dataObj, nil
 	}
+	return nil, parseAPIError(resp)
 }
