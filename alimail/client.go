@@ -27,9 +27,15 @@ type Client struct {
 	httpClient *http.Client
 
 	// Services
-	Domain       *DomainService
-	User         *UserService
-	Organization *OrganizationService
+	Domain              *DomainService
+	User                *UserService
+	Organization        *OrganizationService
+	Department          *DepartmentService
+	Group               *GroupService
+	MailFolder          *MailFolderService
+	Message             *MessageService
+	SharedContact       *SharedContactService
+	SharedContactFolder *SharedContactFolderService
 }
 
 // NewClient 创建一个新的Client实例
@@ -42,6 +48,12 @@ func NewClient(appID, appSecret string) *Client {
 	c.Domain = &DomainService{c}
 	c.User = &UserService{c}
 	c.Organization = &OrganizationService{c}
+	c.Department = &DepartmentService{c}
+	c.Group = &GroupService{c}
+	c.MailFolder = &MailFolderService{c}
+	c.Message = &MessageService{c}
+	c.SharedContact = &SharedContactService{c}
+	c.SharedContactFolder = &SharedContactFolderService{c}
 	return c
 }
 
