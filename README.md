@@ -22,6 +22,8 @@
 
 [阿里企业邮箱](https://wanwang.aliyun.com/mail)GO语言SDK。
 
+接口文档地址：[https://mailhelp.aliyun.com/openapi/index.html](https://mailhelp.aliyun.com/openapi/index.html)
+
 **目前只写了部分接口，其余接口空了补充，也欢迎有需要的同仁PR。**
 
 - [x] 组织
