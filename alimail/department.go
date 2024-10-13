@@ -83,7 +83,7 @@ func (d *DepartmentService) ListByIds(ctx context.Context, ids []string) ([]Depa
 	return nil, parseAPIError(resp)
 }
 
-type CreateDepartmentReq struct {
+type BaseModifyReq struct {
 	Name                     string   `json:"name"`                     // 部门名称
 	ParentID                 string   `json:"parentId"`                 // 父部门 id
 	HiddenExcludeUsers       []string `json:"hiddenExcludeUsers"`       // 部门隐藏后，哪些白名单帐号 id 可访问该部门，仅管理员或授权应用可访问，可修改
@@ -93,20 +93,20 @@ type CreateDepartmentReq struct {
 	Email                    string   `json:"email"`                    // 部门邮件组地址，仅管理员或授权应用可修改
 }
 
+type CreateDepartmentReq struct {
+	BaseModifyReq
+}
+
 // Create 创建部门
 func (u *DepartmentService) Create(ctx context.Context, req CreateDepartmentReq) (*Department, error) {
 	path := "/v2/departments"
 
-	headers := map[string]string{
-		"Content-Type": "application/json",
-	}
-
-	body, err := json.Marshal(req)
+	body, err := json.Marshal(req.BaseModifyReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	resp, err := u.doRequest(ctx, MethodPost, path, headers, body)
+	resp, err := u.doRequest(ctx, MethodPost, path, BaseHeader, body)
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
@@ -122,28 +122,43 @@ func (u *DepartmentService) Create(ctx context.Context, req CreateDepartmentReq)
 	return nil, parseAPIError(resp)
 }
 
-// type UpdateDepartmentReq struct {
-// 	Name              string `json:"name"`
-// 	Introduction      string `json:"introduction"`
-// 	Telephone         string `json:"telephone"`
-// 	Address           string `json:"address"`
-// 	PreferredLanguage string `json:"preferredLanguage"`
-// }
+type UpdateDepartmentReq struct {
+	ID string `json:"id"`
+	BaseModifyReq
+}
 
-// // update 更新组织信息
-// func (d *DepartmentService) Update(ctx context.Context, req UpdateDepartmentReq) error {
-// 	path := "/v2/departments/$current"
+// Update 更新部门信息
+func (d *DepartmentService) Update(ctx context.Context, req UpdateDepartmentReq) error {
+	if req.ID == "" {
+		return fmt.Errorf("id  can't be empty at the same time")
+	}
+	path := "/v2/departments/" + req.ID
 
-// 	body, err := json.Marshal(req)
-// 	if err != nil {
-// 		return fmt.Errorf("failed to marshal request: %w", err)
-// 	}
+	body, err := json.Marshal(req.BaseModifyReq)
+	if err != nil {
+		return fmt.Errorf("failed to marshal request: %w", err)
+	}
 
-// 	resp, err := d.doRequest(ctx, MethodPatch, path, BaseHeader, body)
-// 	if err != nil {
-// 		return fmt.Errorf("request failed: %w", err)
-// 	}
-// 	defer resp.Body.Close()
+	resp, err := d.doRequest(ctx, MethodPatch, path, BaseHeader, body)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
 
-// 	return parseAPIError(resp)
-// }
+	return parseAPIError(resp)
+}
+
+// Delete 删除部门
+func (d *DepartmentService) Delete(ctx context.Context, deptId string) error {
+	if deptId == "" {
+		return fmt.Errorf("id  can't be empty at the same time")
+	}
+	path := "/v2/departments/" + deptId
+	resp, err := d.doRequest(ctx, MethodDelete, path, BaseHeader, nil)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	return parseAPIError(resp)
+}
